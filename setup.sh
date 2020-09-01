@@ -98,14 +98,15 @@ service apache2 restart
 sed -i 's/ each(/ @each(/' /usr/share/php/Console/Getopt.php
 
 ### Install MySQL ODBC Connector
-# The MySQL ODBC connector is used for CDRs. (NB: this line does not seem to work as written)
-
+# The MySQL ODBC connector is used for CDRs.
 mkdir -p /usr/lib/odbc
-curl -s https://cdn.mysql.com/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.11-linux-ubuntu18.04-x86-64bit.tar.gz | \
+# NB: the original setup script used a dead link and installed the 5.3.11 connector; this seems to be an adequate fix.
+curl -s http://www.mirrorservice.org/sites/ftp.mysql.com/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.13-linux-ubuntu18.04-x86-64bit.tar.gz | \
   tar -C /usr/lib/odbc --strip-components=2 --wildcards -zxvf - */lib/*so
 
 ### Configure ODBC
 # Note that this assumes you haven't previously configured ODBC on this machine. If so, you will need to manually add the required data.
+# NB: original script had the line Setup=/usr/lib/odbc/libodbcmy5S.so, changed to Setup=.../libmyodbc5S.so
 
 cat > /etc/odbc.ini << EOF
 [MySQL-asteriskcdrdb]
@@ -122,7 +123,7 @@ cat > /etc/odbcinst.ini << EOF
 [MySQL]
 Description=ODBC for MySQL
 Driver=/usr/lib/odbc/libmyodbc5w.so
-Setup=/usr/lib/odbc/libodbcmy5S.so
+Setup=/usr/lib/odbc/libmyodbc5S.so
 FileUsage=1
 EOF
 
