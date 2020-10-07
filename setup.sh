@@ -1,15 +1,13 @@
 #!/bin/bash
 
 ### Some notes before we get started
-#   1. This initial version of the script is taken wholesale from the following link:
+#   1. This initial version of the script was taken wholesale from the following link:
 #      https://wiki.freepbx.org/display/FOP/Installing+FreePBX+14+on+Ubuntu+18.04
 #      and all credit and rights are retained by whoever already owns them.  Sangoma, I guess?
+#      However, I took the liberty of fixing some bugs I saw (see previous commits for notes)
+#      and have since added some features (specifically, setting up nftables and fail2ban)
 #
-#   2. This script is meant as a convenience for whoever wants it, but be warned that I've
-#      left in some aspects that I consider errors from the original post.  I'll fix these
-#      in the next commit.
-#
-#   3. BE SURE TO RUN THIS SCRIPT AS ROOT!  I think a "sudo" should do you, but
+#   2. BE SURE TO RUN THIS SCRIPT AS ROOT!  I think a "sudo" should do you, but
 #      I can't pretend to know enough about Linux to guarantee it... sudo su definitely works!
 
 ### WHAT FOLLOWS IS THE GUIDE ITSELF
@@ -152,7 +150,7 @@ cd freepbx
 # sudo update-alternatives --set php /usr/bin/php5.6 
 # sudo service apache2 restart
 
-###You've done it!
+### You've done it!
 # You can now start using FreePBX.  Open up your web browser and connect to the IP address or hostname of your new FreePBX server.  
 # You will see the Admin setup page, which is where you set your 'admin' account password, and configure an email address to receive update notifications. 
 
@@ -166,6 +164,16 @@ cd freepbx
 # You can view an example systemd startup script here:
 # http://wiki.freepbx.org/display/HTGS/Example+systemd+startup+script+for+FreePBX
 
+### nftables and fail2ban
+#
+# Adding these services brings this FreePBX install more in line with EvoPBX, which is what
+# I'm more familiar with.  
+# REMEMBER TO SET CORRECT MANAGEMENT IPS IN /etc/nftables/nftables_local.conf!
+# REMEMBER TO SET CORRECT IGNORE IPS IN /etc/fail2ban/jail.local!
 
+cd ~
+apt-get install -y nftables fail2ban
 
-
+# some good default nftables and fail2ban configs are in the 'etc' folder
+# that came with this repo
+# TODO: automatically add those defaults during the above install step
