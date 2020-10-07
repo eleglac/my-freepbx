@@ -174,6 +174,9 @@ cd freepbx
 cd ~
 apt-get install -y nftables fail2ban
 
+systemctl enable nftables
+systemctl enable fail2ban
+
 # some good default nftables and fail2ban configs are in the 'etc' folder
 # that came with this repo
 # TODO: automatically add those defaults during the above install step
